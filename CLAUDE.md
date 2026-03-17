@@ -1,5 +1,15 @@
 # CLAUDE.md — TobyReminder 코딩 관례
 
+## 참고 문서
+
+| 문서 | 설명 |
+|------|------|
+| [`spec.md`](./spec.md) | 제품 요구사항 및 UI/UX 상세 명세 |
+| [`plan.md`](./plan.md) | Phase별 개발 계획 및 기술 스택 |
+| [`tasks.md`](./tasks.md) | Phase별 세부 작업 체크리스트 |
+
+---
+
 ## 실행 환경
 
 ```bash
