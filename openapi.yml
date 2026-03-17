@@ -1,0 +1,200 @@
+openapi: 3.1.0
+
+info:
+  title: TobyReminder API
+  description: Apple Reminder 웹 버전 — ReminderList 및 Reminder 관리 REST API
+  version: 0.1.0
+  contact:
+    name: jschoi-96
+
+servers:
+  - url: http://localhost:8080
+    description: Local Development Server
+
+tags:
+  - name: ReminderList
+    description: 리마인더 목록 관리
+  - name: Reminder
+    description: 리마인더 관리
+
+paths:
+  /api/lists:
+    get:
+      tags: [ReminderList]
+      summary: 전체 목록 조회
+      operationId: getAllLists
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReminderListResponse'
+
+    post:
+      tags: [ReminderList]
+      summary: 목록 생성
+      operationId: createList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReminderListRequest'
+      responses:
+        '201':
+          description: 생성 성공
+          headers:
+            Location:
+              description: 생성된 리소스의 URI
+              schema:
+                type: string
+                format: uri
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReminderListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /api/lists/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+
+    get:
+      tags: [ReminderList]
+      summary: 목록 단건 조회
+      operationId: getListById
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReminderListResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags: [ReminderList]
+      summary: 목록 수정
+      operationId: updateList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReminderListRequest'
+      responses:
+        '200':
+          description: 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReminderListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags: [ReminderList]
+      summary: 목록 삭제
+      description: 목록 삭제 시 소속된 리마인더도 함께 삭제됩니다.
+      operationId: deleteList
+      responses:
+        '204':
+          description: 삭제 성공
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: 리소스 ID
+
+  schemas:
+    ReminderListRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: 목록 이름
+          example: 업무
+        color:
+          type: string
+          description: 목록 색상 (hex)
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          example: '#007AFF'
+        icon:
+          type: string
+          description: 목록 아이콘 (이모지)
+          example: 💼
+
+    ReminderListResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: 목록 ID
+          example: 1
+        name:
+          type: string
+          description: 목록 이름
+          example: 업무
+        color:
+          type: string
+          description: 목록 색상 (hex)
+          example: '#007AFF'
+        icon:
+          type: string
+          description: 목록 아이콘 (이모지)
+          example: 💼
+        createdAt:
+          type: string
+          format: date-time
+          description: 생성일시
+          example: '2026-03-17T09:00:00'
+
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-03-17T09:00:00'
+        status:
+          type: integer
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: 'ReminderList not found: 99'
+
+  responses:
+    NotFound:
+      description: 리소스를 찾을 수 없음
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    BadRequest:
+      description: 잘못된 요청
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
