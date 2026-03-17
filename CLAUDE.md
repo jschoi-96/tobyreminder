@@ -111,8 +111,8 @@ class Complete {
 - 구현 클래스는 `service` 패키지에 위치하며, 클래스명 앞에 `Default`를 붙인다.
 
 ```
-ports/inp/ReminderListService.java       ← 인터페이스 (순수 메서드 시그니처만)
-service/DefaultReminderListService.java  ← 구현체 (@Service, @Transactional)
+service/ports/inp/ReminderListService.java  ← 인터페이스 (순수 메서드 시그니처만)
+service/DefaultReminderListService.java     ← 구현체 (@Service, @Transactional)
 ```
 
 ### 트랜잭션
@@ -160,7 +160,7 @@ class DefaultReminderListServiceTest {
 ## 레이어 구조
 
 ```
-controller  →  ports/inp (interface)  →  service (impl)  →  repository  →  domain
+controller  →  service/ports/inp (interface)  →  service (impl)  →  repository  →  domain
 ```
 
 - Controller는 요청/응답 변환만 담당한다.

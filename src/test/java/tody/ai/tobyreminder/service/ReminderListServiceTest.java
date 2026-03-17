@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import tody.ai.tobyreminder.domain.ReminderList;
-import tody.ai.tobyreminder.ports.inp.ReminderListService;
+import tody.ai.tobyreminder.service.ports.inp.ReminderListService;
 
 import java.util.List;
 

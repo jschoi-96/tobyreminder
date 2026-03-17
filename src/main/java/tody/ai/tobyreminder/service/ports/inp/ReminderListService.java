@@ -1,4 +1,4 @@
-package tody.ai.tobyreminder.ports.inp;
+package tody.ai.tobyreminder.service.ports.inp;
 
 import tody.ai.tobyreminder.domain.ReminderList;
 

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tody.ai.tobyreminder.domain.ReminderList;
-import tody.ai.tobyreminder.ports.inp.ReminderListService;
+import tody.ai.tobyreminder.service.ports.inp.ReminderListService;
 import tody.ai.tobyreminder.repository.ReminderListRepository;
 
 import java.util.List;
