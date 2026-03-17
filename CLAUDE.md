@@ -87,10 +87,6 @@ class ReminderListTest {
 - `@SpringBootTest` + `@Transactional` 사용.
 - 테스트 후 자동 롤백.
 
-### Service Test
-- Mockito 기반 Unit Test (`@ExtendWith(MockitoExtension.class)`).
-- Repository를 Mock으로 처리한다.
-
 ### 테스트 구조
 - `@Nested` + `@DisplayName`으로 계층 구조를 명확히 한다.
 - DisplayName은 한국어로 작성한다.
@@ -107,10 +103,64 @@ class Complete {
 
 ---
 
+## Service 계층 규칙
+
+### 인터페이스 분리
+- Service는 반드시 인터페이스와 구현 클래스를 분리한다.
+- 인터페이스는 `ports/inp` 패키지에 위치한다.
+- 구현 클래스는 `service` 패키지에 위치하며, 클래스명 앞에 `Default`를 붙인다.
+
+```
+ports/inp/ReminderListService.java       ← 인터페이스 (순수 메서드 시그니처만)
+service/DefaultReminderListService.java  ← 구현체 (@Service, @Transactional)
+```
+
+### 트랜잭션
+- 구현 클래스 레벨에 `@Transactional(readOnly = true)`를 기본으로 선언한다.
+- 쓰기 작업 메서드에만 `@Transactional`을 개별 선언한다.
+
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)          // 기본: 읽기 전용
+public class DefaultReminderListService implements ReminderListService {
+
+    @Override
+    @Transactional                        // 쓰기 작업에만 별도 선언
+    public ReminderList create(...) { ... }
+}
+```
+
+### 예외 처리
+- 존재하지 않는 리소스 조회 시 `IllegalArgumentException`을 던진다.
+- 메시지에 요청한 id를 포함한다.
+
+```java
+return repository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("ReminderList not found: " + id));
+```
+
+### Service Test
+- `@SpringBootTest` + `@Transactional` 통합 테스트로 작성한다.
+- Mock 사용 금지. 실제 Repository와 DB(H2)를 사용한다.
+- 테스트 후 자동 롤백.
+
+```java
+@SpringBootTest
+@Transactional
+class DefaultReminderListServiceTest {
+
+    @Autowired
+    private ReminderListService reminderListService; // 인터페이스로 주입
+}
+```
+
+---
+
 ## 레이어 구조
 
 ```
-controller  →  service  →  repository  →  domain
+controller  →  ports/inp (interface)  →  service (impl)  →  repository  →  domain
 ```
 
 - Controller는 요청/응답 변환만 담당한다.

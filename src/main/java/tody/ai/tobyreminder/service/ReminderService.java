@@ -3,7 +3,7 @@ package tody.ai.tobyreminder.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tody.ai.tobyreminder.entity.Reminder;
+import tody.ai.tobyreminder.domain.Reminder;
 import tody.ai.tobyreminder.repository.ReminderRepository;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class ReminderService {
     @Transactional
     public Reminder complete(Long id) {
         Reminder reminder = findById(id);
-        reminder.setCompleted(true);
+        reminder.complete();
         return reminder;
     }
 

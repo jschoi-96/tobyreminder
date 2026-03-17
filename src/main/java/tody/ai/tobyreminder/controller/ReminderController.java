@@ -3,7 +3,7 @@ package tody.ai.tobyreminder.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tody.ai.tobyreminder.entity.Reminder;
+import tody.ai.tobyreminder.domain.Reminder;
 import tody.ai.tobyreminder.service.ReminderService;
 
 import java.util.List;
