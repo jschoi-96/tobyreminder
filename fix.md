@@ -44,7 +44,7 @@
   - 예상치 못한 예외를 위한 catch-all `Exception` 핸들러 추가
   - 에러 응답 포맷 일관성 유지
 
-- [ ] **[BE] 전용 예외 타입 도입**
+- [x] **[BE] 전용 예외 타입 도입**
   - `IllegalArgumentException` 단일 타입으로 리소스 미존재와 도메인 규칙 위반을 모두 처리하는 문제 개선
   - `ResourceNotFoundException` (→ 404), `DomainException` (→ 400) 분리
   - `GlobalExceptionHandler`에서 각각 처리
@@ -100,8 +100,8 @@
 
 | 구분 | 전체 | 완료 | 진행률 |
 |------|------|------|--------|
-| Critical | 3 | 0 | 0% |
-| Major | 6 | 0 | 0% |
+| Critical | 3 | 3 | 100% |
+| Major | 6 | 5 | 83% |
 | Minor | 5 | 0 | 0% |
 | Suggestions | 3 | 0 | 0% |
-| **합계** | **17** | **0** | **0%** |
+| **합계** | **17** | **8** | **47%** |

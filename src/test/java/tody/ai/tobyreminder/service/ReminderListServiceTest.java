@@ -11,6 +11,8 @@ import tody.ai.tobyreminder.service.ports.inp.ReminderListService;
 
 import java.util.List;
 
+import tody.ai.tobyreminder.exception.ResourceNotFoundException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -67,7 +69,7 @@ class ReminderListServiceTest {
         @DisplayName("존재하지 않는 id로 조회하면 예외가 발생한다")
         void throwsWhenNotFound() {
             assertThatThrownBy(() -> reminderListService.findById(999L))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(ResourceNotFoundException.class)
                     .hasMessageContaining("999");
         }
     }
@@ -138,7 +140,7 @@ class ReminderListServiceTest {
         @DisplayName("존재하지 않는 id로 수정하면 예외가 발생한다")
         void throwsWhenNotFound() {
             assertThatThrownBy(() -> reminderListService.update(999L, "쇼핑", "#FF9500", "🛒"))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(ResourceNotFoundException.class)
                     .hasMessageContaining("999");
         }
     }
@@ -156,7 +158,7 @@ class ReminderListServiceTest {
             reminderListService.delete(id);
 
             assertThatThrownBy(() -> reminderListService.findById(id))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(ResourceNotFoundException.class);
         }
 
         @Test
@@ -173,7 +175,7 @@ class ReminderListServiceTest {
         @DisplayName("존재하지 않는 id로 삭제하면 예외가 발생한다")
         void throwsWhenNotFound() {
             assertThatThrownBy(() -> reminderListService.delete(999L))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(ResourceNotFoundException.class)
                     .hasMessageContaining("999");
         }
     }

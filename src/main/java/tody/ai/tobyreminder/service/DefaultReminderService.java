@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tody.ai.tobyreminder.domain.Priority;
 import tody.ai.tobyreminder.domain.Reminder;
 import tody.ai.tobyreminder.domain.ReminderList;
+import tody.ai.tobyreminder.exception.ResourceNotFoundException;
 import tody.ai.tobyreminder.repository.ReminderListRepository;
 import tody.ai.tobyreminder.repository.ReminderRepository;
 import tody.ai.tobyreminder.service.ports.inp.ReminderService;
@@ -42,7 +43,7 @@ public class DefaultReminderService implements ReminderService {
     @Override
     public Reminder findById(Long id) {
         return reminderRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Reminder not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Reminder", id));
     }
 
     @Override
@@ -51,7 +52,7 @@ public class DefaultReminderService implements ReminderService {
         Reminder reminder = new Reminder(title);
         if (listId != null) {
             ReminderList reminderList = reminderListRepository.findById(listId)
-                    .orElseThrow(() -> new IllegalArgumentException("ReminderList not found: " + listId));
+                    .orElseThrow(() -> new ResourceNotFoundException("ReminderList", listId));
             reminder.assignTo(reminderList);
         }
         return reminderRepository.save(reminder);
@@ -63,7 +64,7 @@ public class DefaultReminderService implements ReminderService {
         Reminder reminder = findById(id);
         ReminderList reminderList = listId != null
                 ? reminderListRepository.findById(listId)
-                        .orElseThrow(() -> new IllegalArgumentException("ReminderList not found: " + listId))
+                        .orElseThrow(() -> new ResourceNotFoundException("ReminderList", listId))
                 : null;
         reminder.update(title, notes, dueDate, priority, reminderList);
         return reminder;
