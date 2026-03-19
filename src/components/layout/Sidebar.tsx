@@ -1,10 +1,12 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getReminders, getLists } from '@/lib/api';
 import { SmartListCard } from '@/components/sidebar/SmartListCard';
 import { ListItem } from '@/components/sidebar/ListItem';
 import { isToday } from '@/lib/dateUtils';
+import { buildIncompleteCountMap } from '@/lib/countUtils';
 import type { Reminder } from '@/types';
 
 export function Sidebar() {
@@ -18,15 +20,19 @@ export function Sidebar() {
     queryFn: getLists,
   });
 
-  const todayCount = reminders.filter((r) => isToday(r.dueDate) && !r.completed).length;
-  const scheduledCount = reminders.filter(
-    (r) => r.dueDate && new Date(r.dueDate) > new Date() && !r.completed,
-  ).length;
-  const allCount = reminders.filter((r) => !r.completed).length;
-  const completedCount = reminders.filter((r) => r.completed).length;
+  const todayCount = useMemo(
+    () => reminders.filter((r) => isToday(r.dueDate) && !r.completed).length,
+    [reminders],
+  );
+  const scheduledCount = useMemo(
+    () => reminders.filter((r) => r.dueDate && new Date(r.dueDate) > new Date() && !r.completed).length,
+    [reminders],
+  );
+  const allCount = useMemo(() => reminders.filter((r) => !r.completed).length, [reminders]);
+  const completedCount = useMemo(() => reminders.filter((r) => r.completed).length, [reminders]);
 
-  const incompleteByList = (listId: number) =>
-    reminders.filter((r) => r.listId === listId && !r.completed).length;
+  // O(n) 단일 패스로 listId별 미완료 카운트 맵을 생성
+  const incompleteCountMap = useMemo(() => buildIncompleteCountMap(reminders), [reminders]);
 
   return (
     <aside
@@ -49,7 +55,7 @@ export function Sidebar() {
           </p>
           <div className="flex flex-col gap-0.5">
             {lists.map((list) => (
-              <ListItem key={list.id} list={list} incompleteCount={incompleteByList(list.id)} />
+              <ListItem key={list.id} list={list} incompleteCount={incompleteCountMap[list.id] ?? 0} />
             ))}
           </div>
         </div>
