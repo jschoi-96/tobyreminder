@@ -8,63 +8,63 @@
 
 ### [BE] 엔티티 보강
 
-- [ ] `Priority` Enum 생성 (`NONE`, `LOW`, `MEDIUM`, `HIGH`)
-- [ ] `Reminder` 엔티티 필드 추가
-  - [ ] `notes` (String)
-  - [ ] `dueDate` (LocalDateTime)
-  - [ ] `priority` (Priority, default: NONE)
-  - [ ] `completedAt` (LocalDateTime)
-  - [ ] `createdAt` (LocalDateTime, `@CreatedDate`)
-  - [ ] `updatedAt` (LocalDateTime, `@LastModifiedDate`)
-- [ ] `@EnableJpaAuditing` 활성화 (메인 클래스 또는 Config)
-- [ ] `ReminderList` 엔티티 생성
-  - [ ] `id` (Long, PK)
-  - [ ] `name` (String, not null)
-  - [ ] `color` (String, hex)
-  - [ ] `icon` (String, 이모지)
-  - [ ] `createdAt` (LocalDateTime, `@CreatedDate`)
-- [ ] `Reminder` ↔ `ReminderList` 연관관계 설정 (`@ManyToOne`)
+- [x] `Priority` Enum 생성 (`NONE`, `LOW`, `MEDIUM`, `HIGH`)
+- [x] `Reminder` 엔티티 필드 추가
+  - [x] `notes` (String)
+  - [x] `dueDate` (LocalDateTime)
+  - [x] `priority` (Priority, default: NONE)
+  - [x] `completedAt` (LocalDateTime)
+  - [x] `createdAt` (LocalDateTime, 생성자에서 직접 설정)
+  - [x] `updatedAt` (LocalDateTime, 도메인 메서드에서 직접 설정)
+- [x] `@EnableJpaAuditing` 활성화 → 생성자 기반 날짜 설정으로 대체
+- [x] `ReminderList` 엔티티 생성
+  - [x] `id` (Long, PK)
+  - [x] `name` (String, not null)
+  - [x] `color` (String, hex)
+  - [x] `icon` (String, 이모지)
+  - [x] `createdAt` (LocalDateTime, 생성자에서 직접 설정)
+- [x] `Reminder` ↔ `ReminderList` 연관관계 설정 (`@ManyToOne`)
 
 ### [BE] Repository / Service / Controller
 
-- [ ] `ReminderListRepository` 생성
-- [ ] `ReminderListService` 생성 (CRUD)
-- [ ] `ReminderListController` 생성
-  - [ ] `GET /api/lists`
-  - [ ] `POST /api/lists`
-  - [ ] `PUT /api/lists/{id}`
-  - [ ] `DELETE /api/lists/{id}`
-- [ ] `ReminderController` 업데이트
-  - [ ] `PUT /api/reminders/{id}` 추가 (전체 수정)
-  - [ ] `GET /api/reminders` 쿼리 파라미터 지원
-    - [ ] `listId` 필터
-    - [ ] `filter=today` (오늘 dueDate)
-    - [ ] `filter=scheduled` (미래 dueDate, 미완료)
-    - [ ] `filter=completed` (completed=true)
+- [x] `ReminderListRepository` 생성
+- [x] `ReminderListService` 생성 (CRUD)
+- [x] `ReminderListController` 생성
+  - [x] `GET /api/lists`
+  - [x] `POST /api/lists`
+  - [x] `PUT /api/lists/{id}`
+  - [x] `DELETE /api/lists/{id}`
+- [x] `ReminderController` 업데이트
+  - [x] `PUT /api/reminders/{id}` 추가 (전체 수정)
+  - [x] `GET /api/reminders` 쿼리 파라미터 지원
+    - [x] `listId` 필터
+    - [x] `filter=today` (오늘 dueDate)
+    - [x] `filter=scheduled` (미래 dueDate, 미완료)
+    - [x] `filter=completed` (completed=true)
 
 ### [BE] CORS 설정
 
-- [ ] `config/WebConfig.java` 생성
-- [ ] `localhost:3000` 허용 (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`)
+- [x] `config/WebConfig.java` 생성
+- [x] `localhost:3000` 허용 (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`)
 
 ### [FE] 프로젝트 초기화
 
-- [ ] Next.js 15 프로젝트 생성 (`tobyreminder-web/`, TypeScript + Tailwind + App Router)
-- [ ] shadcn/ui 초기화 (`npx shadcn@latest init`)
-- [ ] TanStack Query v5 설치 및 `QueryClientProvider` 설정
-- [ ] Zustand v5 설치
-- [ ] `src/types/index.ts` 생성 (Reminder, ReminderList 타입 정의)
-- [ ] `src/lib/api.ts` 생성 (Spring Boot API 클라이언트 함수)
-  - [ ] `getReminders(params)` 함수
-  - [ ] `createReminder(data)` 함수
-  - [ ] `updateReminder(id, data)` 함수
-  - [ ] `toggleComplete(id)` 함수
-  - [ ] `deleteReminder(id)` 함수
-  - [ ] `getLists()` 함수
-  - [ ] `createList(data)` 함수
-  - [ ] `updateList(id, data)` 함수
-  - [ ] `deleteList(id)` 함수
-- [ ] `src/store/useAppStore.ts` 뼈대 생성 (선택된 목록 상태)
+- [x] Next.js 15 프로젝트 생성 (`tobyreminder-web/`, TypeScript + Tailwind + App Router)
+- [x] shadcn/ui 초기화 (`npx shadcn@latest init`)
+- [x] TanStack Query v5 설치 및 `QueryClientProvider` 설정
+- [x] Zustand v5 설치
+- [x] `src/types/index.ts` 생성 (Reminder, ReminderList 타입 정의)
+- [x] `src/lib/api.ts` 생성 (Spring Boot API 클라이언트 함수)
+  - [x] `getReminders(params)` 함수
+  - [x] `createReminder(data)` 함수
+  - [x] `updateReminder(id, data)` 함수
+  - [x] `toggleComplete(id)` 함수
+  - [x] `deleteReminder(id)` 함수
+  - [x] `getLists()` 함수
+  - [x] `createList(data)` 함수
+  - [x] `updateList(id, data)` 함수
+  - [x] `deleteList(id)` 함수
+- [x] `src/store/useAppStore.ts` 뼈대 생성 (선택된 목록 상태)
 
 **완료 기준:** `./gradlew bootRun` + `npm run dev` 모두 오류 없이 실행
 
@@ -243,7 +243,7 @@
 
 | Phase | 내용 | BE | FE |
 |-------|------|----|----|
-| Phase 1 | 기반 구축 | ⬜ | ⬜ |
+| Phase 1 | 기반 구축 | ✅ | ✅ |
 | Phase 2 | 레이아웃 + 스마트 목록 | — | ⬜ |
 | Phase 3 | 리마인더 목록 + 완료 토글 | — | ⬜ |
 | Phase 4 | 리마인더 생성 | — | ⬜ |
