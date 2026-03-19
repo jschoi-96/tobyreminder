@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getReminders, getLists, updateReminder, ApiError } from '@/lib/api';
+import { buildDueDate } from '@/lib/buildDueDate';
 import { useAppStore } from '@/store/useAppStore';
 import type { Priority, Reminder, ReminderList } from '@/types';
 
@@ -26,6 +27,8 @@ export function ReminderDetailPanel() {
   const { selectedReminderId, setSelectedReminderId } = useAppStore();
   const queryClient = useQueryClient();
   const overlayRef = useRef<HTMLDivElement>(null);
+  // 서버 데이터로 로컬 상태를 동기화하는 중에는 자동저장을 막는다
+  const isSyncingRef = useRef(false);
 
   const { data: reminders = [] } = useQuery<Reminder[]>({
     queryKey: ['reminders'],
@@ -48,9 +51,10 @@ export function ReminderDetailPanel() {
   const [timeEnabled, setTimeEnabled] = useState(false);
   const [timeValue, setTimeValue] = useState('');
 
-  // Sync local state when reminder changes
+  // 서버 데이터로 로컬 상태를 동기화할 때 자동저장이 트리거되지 않도록 플래그 사용
   useEffect(() => {
     if (!reminder) return;
+    isSyncingRef.current = true;
     setTitle(reminder.title);
     setNotes(reminder.notes ?? '');
     setPriority(reminder.priority);
@@ -69,6 +73,9 @@ export function ReminderDetailPanel() {
       setTimeEnabled(false);
       setTimeValue('');
     }
+    // 다음 렌더 사이클 이후 플래그 해제
+    const t = setTimeout(() => { isSyncingRef.current = false; }, 600);
+    return () => clearTimeout(t);
   }, [reminder?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -93,12 +100,6 @@ export function ReminderDetailPanel() {
     },
   });
 
-  function buildDueDate(): string | undefined {
-    if (!dateEnabled || !dateValue) return undefined;
-    const base = timeEnabled && timeValue ? `${dateValue}T${timeValue}:00` : `${dateValue}T00:00:00`;
-    return base;
-  }
-
   const debouncedTitle = useDebounce(title, 500);
   const debouncedNotes = useDebounce(notes, 500);
 
@@ -106,18 +107,18 @@ export function ReminderDetailPanel() {
   saveRef.current = save;
 
   const autoSave = useCallback(() => {
-    if (!selectedReminderId || !reminder) return;
+    // 동기화 중이거나 패널이 닫혀있으면 저장 건너뜀
+    if (isSyncingRef.current || !selectedReminderId || !reminder) return;
     saveRef.current({
-      title: debouncedTitle || reminder.title,
-      notes: debouncedNotes || undefined,
+      title: debouncedTitle !== '' ? debouncedTitle : reminder.title,
+      notes: debouncedNotes !== '' ? debouncedNotes : undefined,
       priority,
       listId: listId !== '' ? (listId as number) : undefined,
-      dueDate: buildDueDate(),
+      dueDate: buildDueDate({ dateEnabled, dateValue, timeEnabled, timeValue }),
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedTitle, debouncedNotes, priority, listId, dateEnabled, dateValue, timeEnabled, timeValue, selectedReminderId]);
+  }, [debouncedTitle, debouncedNotes, priority, listId, dateEnabled, dateValue, timeEnabled, timeValue, selectedReminderId, reminder]);
 
-  // Auto-save whenever debounced values change
+  // debounce된 값이 변경될 때만 자동저장
   useEffect(() => {
     if (!selectedReminderId) return;
     autoSave();
