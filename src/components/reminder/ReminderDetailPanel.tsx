@@ -60,11 +60,16 @@ export function ReminderDetailPanel() {
     setPriority(reminder.priority);
     setListId(reminder.listId ?? '');
     if (reminder.dueDate) {
-      const d = new Date(reminder.dueDate);
+      // ISO 문자열에서 직접 파싱 (timezone 변환 없이 저장된 값 그대로 표시)
+      // 예: "2026-03-19T16:30:00+09:00" → date="2026-03-19", time="16:30"
+      const tIdx = reminder.dueDate.indexOf('T');
+      const dateStr = reminder.dueDate.slice(0, tIdx);
+      const timePart = reminder.dueDate.slice(tIdx + 1, tIdx + 6); // "HH:mm"
+      const [hStr, mStr] = timePart.split(':');
+      const h = parseInt(hStr, 10);
+      const m = parseInt(mStr, 10);
       setDateEnabled(true);
-      setDateValue(d.toISOString().slice(0, 10));
-      const h = d.getHours();
-      const m = d.getMinutes();
+      setDateValue(dateStr);
       setTimeEnabled(h !== 0 || m !== 0);
       setTimeValue(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
     } else {
@@ -80,7 +85,13 @@ export function ReminderDetailPanel() {
 
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  const { mutate: save } = useMutation({
+  useEffect(() => {
+    if (!saveError) return;
+    const t = setTimeout(() => setSaveError(null), 5000);
+    return () => clearTimeout(t);
+  }, [saveError]);
+
+  const { mutate: save, isPending: isSaving } = useMutation({
     mutationFn: (data: Parameters<typeof updateReminder>[1]) =>
       updateReminder(selectedReminderId!, data),
     onSuccess: (updated) => {
@@ -145,7 +156,9 @@ export function ReminderDetailPanel() {
         {/* Header */}
         <div className="flex flex-col border-b border-gray-100">
           <div className="flex items-center justify-between px-5 py-4">
-            <span className="text-sm text-gray-400">세부사항</span>
+            <span className="text-sm text-gray-400">
+              {isSaving ? '저장 중...' : '세부사항'}
+            </span>
             <button
               onClick={() => setSelectedReminderId(null)}
               className="text-blue-500 text-sm font-semibold"

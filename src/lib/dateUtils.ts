@@ -9,6 +9,11 @@ export function isToday(dateStr: string | null): boolean {
   );
 }
 
+export function isScheduled(dateStr: string | null, completed: boolean): boolean {
+  if (!dateStr || completed) return false;
+  return isToday(dateStr) || new Date(dateStr) > new Date();
+}
+
 export function isOverdue(dateStr: string | null, completed: boolean): boolean {
   if (!dateStr || completed) return false;
   return new Date(dateStr) < new Date();

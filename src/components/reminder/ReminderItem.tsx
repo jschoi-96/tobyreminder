@@ -52,7 +52,7 @@ export function ReminderItem({ reminder, listColor }: ReminderItemProps) {
       {/* Circle checkbox */}
       <button
         onClick={(e) => { e.stopPropagation(); toggle(); }}
-        className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200"
+        className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer hover:opacity-70"
         style={{
           borderColor: color,
           backgroundColor: reminder.completed ? color : 'transparent',

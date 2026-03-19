@@ -1,15 +1,46 @@
 'use client';
 
-import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getReminders, getLists } from '@/lib/api';
+import { useMemo, useState, useRef, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getReminders, getLists, createList } from '@/lib/api';
 import { SmartListCard } from '@/components/sidebar/SmartListCard';
 import { ListItem } from '@/components/sidebar/ListItem';
-import { isToday } from '@/lib/dateUtils';
+import { isToday, isScheduled } from '@/lib/dateUtils';
 import { buildIncompleteCountMap } from '@/lib/countUtils';
-import type { Reminder } from '@/types';
+import type { Reminder, ReminderList } from '@/types';
 
 export function Sidebar() {
+  const queryClient = useQueryClient();
+  const [isAddingList, setIsAddingList] = useState(false);
+  const [newListName, setNewListName] = useState('');
+  const listInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isAddingList) listInputRef.current?.focus();
+  }, [isAddingList]);
+
+  const { mutate: addList, isPending: isAddingListPending } = useMutation({
+    mutationFn: (name: string) => createList({ name }),
+    onSuccess: (created) => {
+      queryClient.setQueryData<ReminderList[]>(['lists'], (old = []) => [...old, created]);
+      setNewListName('');
+      setIsAddingList(false);
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['lists'] }),
+  });
+
+  function handleListKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      const trimmed = newListName.trim();
+      if (!trimmed) return;
+      addList(trimmed);
+    }
+    if (e.key === 'Escape') {
+      setNewListName('');
+      setIsAddingList(false);
+    }
+  }
+
   const { data: reminders = [] } = useQuery<Reminder[]>({
     queryKey: ['reminders'],
     queryFn: () => getReminders({}),
@@ -25,7 +56,7 @@ export function Sidebar() {
     [reminders],
   );
   const scheduledCount = useMemo(
-    () => reminders.filter((r) => r.dueDate && new Date(r.dueDate) > new Date() && !r.completed).length,
+    () => reminders.filter((r) => isScheduled(r.dueDate, r.completed)).length,
     [reminders],
   );
   const allCount = useMemo(() => reminders.filter((r) => !r.completed).length, [reminders]);
@@ -48,18 +79,40 @@ export function Sidebar() {
       </div>
 
       {/* My lists */}
-      {lists.length > 0 && (
-        <div>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide px-3 mb-1">
-            나의 목록
-          </p>
-          <div className="flex flex-col gap-0.5">
-            {lists.map((list) => (
-              <ListItem key={list.id} list={list} incompleteCount={incompleteCountMap[list.id] ?? 0} />
-            ))}
-          </div>
+      <div>
+        <div className="flex items-center justify-between px-3 mb-1">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">나의 목록</p>
+          <button
+            onClick={() => setIsAddingList((v) => !v)}
+            className="text-gray-400 hover:text-blue-500 transition-colors text-lg leading-none"
+            title="목록 추가"
+          >
+            +
+          </button>
         </div>
-      )}
+        <div className="flex flex-col gap-0.5">
+          {lists.map((list) => (
+            <ListItem key={list.id} list={list} incompleteCount={incompleteCountMap[list.id] ?? 0} />
+          ))}
+          {isAddingList && (
+            <div className="flex items-center gap-2 px-3 py-1.5">
+              <span className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center text-sm flex-shrink-0">
+                📋
+              </span>
+              <input
+                ref={listInputRef}
+                value={newListName}
+                onChange={(e) => setNewListName(e.target.value)}
+                onKeyDown={handleListKeyDown}
+                onBlur={() => { if (!newListName.trim()) setIsAddingList(false); }}
+                placeholder="목록 이름"
+                disabled={isAddingListPending}
+                className="flex-1 text-sm outline-none bg-transparent text-gray-800 placeholder:text-gray-400 disabled:opacity-50"
+              />
+            </div>
+          )}
+        </div>
+      </div>
     </aside>
   );
 }

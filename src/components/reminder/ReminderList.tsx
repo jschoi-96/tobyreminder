@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getReminders, getLists } from '@/lib/api';
 import { useAppStore } from '@/store/useAppStore';
 import { ReminderItem } from './ReminderItem';
-import { isToday } from '@/lib/dateUtils';
+import { isToday, isScheduled } from '@/lib/dateUtils';
 import type { Reminder, ReminderList as ReminderListType } from '@/types';
 
 export function ReminderList() {
@@ -30,9 +30,7 @@ export function ReminderList() {
   } else if (selection.filter === 'today') {
     filtered = allReminders.filter((r) => isToday(r.dueDate));
   } else if (selection.filter === 'scheduled') {
-    filtered = allReminders.filter(
-      (r) => r.dueDate && new Date(r.dueDate) > new Date() && !r.completed,
-    );
+    filtered = allReminders.filter((r) => isScheduled(r.dueDate, r.completed));
   } else if (selection.filter === 'completed') {
     filtered = allReminders.filter((r) => r.completed);
   } else {

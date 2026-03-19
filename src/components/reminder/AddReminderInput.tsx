@@ -15,7 +15,7 @@ export function AddReminderInput() {
 
   const listId = selection.type === 'list' ? selection.listId : undefined;
 
-  const { mutate: addReminder } = useMutation({
+  const { mutate: addReminder, isPending } = useMutation({
     mutationFn: (title: string) => createReminder({ title, listId }),
     onMutate: async (title) => {
       await queryClient.cancelQueries({ queryKey: ['reminders'] });
@@ -91,8 +91,10 @@ export function AddReminderInput() {
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
         placeholder="제목"
-        className="flex-1 text-sm outline-none bg-transparent text-gray-900 placeholder:text-gray-400"
+        disabled={isPending}
+        className="flex-1 text-sm outline-none bg-transparent text-gray-900 placeholder:text-gray-400 disabled:opacity-50"
       />
+      {isPending && <span className="text-xs text-gray-400">추가 중...</span>}
     </div>
   );
 }
