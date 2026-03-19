@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toggleComplete } from '@/lib/api';
 import { useAppStore } from '@/store/useAppStore';
 import { isOverdue, formatDueDate } from '@/lib/dateUtils';
+import { safeRollback } from '@/lib/toggleRollback';
 import type { Reminder } from '@/types';
 
 interface ReminderItemProps {
@@ -34,7 +35,8 @@ export function ReminderItem({ reminder, listColor }: ReminderItemProps) {
       return { prev };
     },
     onError: (_err, _vars, ctx) => {
-      if (ctx?.prev) queryClient.setQueryData(['reminders'], ctx.prev);
+      const current = queryClient.getQueryData<Reminder[]>(['reminders']) ?? [];
+      queryClient.setQueryData(['reminders'], safeRollback(ctx, current));
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['reminders'] });
