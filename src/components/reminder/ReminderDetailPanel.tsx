@@ -134,7 +134,7 @@ export function ReminderDetailPanel() {
     <div
       ref={overlayRef}
       onClick={handleOverlayClick}
-      className="fixed inset-0 z-40"
+      className="absolute inset-0 z-40"
       style={{ backgroundColor: 'rgba(0,0,0,0.15)' }}
     >
       {/* Slide-in panel */}
