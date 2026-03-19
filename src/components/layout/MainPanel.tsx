@@ -3,7 +3,8 @@
 import { useAppStore } from '@/store/useAppStore';
 import { useQuery } from '@tanstack/react-query';
 import { getLists } from '@/lib/api';
-import type { ReminderList } from '@/types';
+import { ReminderList } from '@/components/reminder/ReminderList';
+import type { ReminderList as ReminderListType } from '@/types';
 
 const SMART_LABELS: Record<string, string> = {
   all: '전체',
@@ -15,7 +16,7 @@ const SMART_LABELS: Record<string, string> = {
 export function MainPanel() {
   const { selection } = useAppStore();
 
-  const { data: lists = [] } = useQuery<ReminderList[]>({
+  const { data: lists = [] } = useQuery<ReminderListType[]>({
     queryKey: ['lists'],
     queryFn: getLists,
   });
@@ -42,7 +43,7 @@ export function MainPanel() {
         </h1>
       </div>
       <div className="flex-1 overflow-y-auto px-6 py-2">
-        {/* ReminderList will be placed here in Phase 3 */}
+        <ReminderList />
       </div>
     </main>
   );
