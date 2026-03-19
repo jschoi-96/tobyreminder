@@ -35,7 +35,7 @@ public class DefaultReminderService implements ReminderService {
             }
             case "scheduled" -> reminderRepository.findScheduled(LocalDateTime.now());
             case "completed" -> reminderRepository.findByCompleted(true);
-            default -> reminderRepository.findByCompleted(false);
+            default -> reminderRepository.findAll();
         };
     }
 
