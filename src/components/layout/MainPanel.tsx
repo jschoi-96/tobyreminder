@@ -4,6 +4,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { useQuery } from '@tanstack/react-query';
 import { getLists } from '@/lib/api';
 import { ReminderList } from '@/components/reminder/ReminderList';
+import { AddReminderInput } from '@/components/reminder/AddReminderInput';
 import type { ReminderList as ReminderListType } from '@/types';
 
 const SMART_LABELS: Record<string, string> = {
@@ -44,6 +45,12 @@ export function MainPanel() {
       </div>
       <div className="flex-1 overflow-y-auto px-6 py-2">
         <ReminderList />
+        {(selection.type === 'list' ||
+          (selection.type === 'smart' && selection.filter !== 'completed')) && (
+          <div className="mt-1">
+            <AddReminderInput />
+          </div>
+        )}
       </div>
     </main>
   );
