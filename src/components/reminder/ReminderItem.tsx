@@ -3,6 +3,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toggleComplete } from '@/lib/api';
 import { useAppStore } from '@/store/useAppStore';
+import { isOverdue, formatDueDate } from '@/lib/dateUtils';
 import type { Reminder } from '@/types';
 
 interface ReminderItemProps {
@@ -15,20 +16,6 @@ const PRIORITY_ICONS: Record<string, string> = {
   MEDIUM: '!!',
   HIGH: '!!!',
 };
-
-function formatDate(dateStr: string | null): string | null {
-  if (!dateStr) return null;
-  const d = new Date(dateStr);
-  const now = new Date();
-  const isToday =
-    d.getFullYear() === now.getFullYear() &&
-    d.getMonth() === now.getMonth() &&
-    d.getDate() === now.getDate();
-  if (isToday) {
-    return d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-  }
-  return d.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
-}
 
 export function ReminderItem({ reminder, listColor }: ReminderItemProps) {
   const queryClient = useQueryClient();
@@ -54,9 +41,8 @@ export function ReminderItem({ reminder, listColor }: ReminderItemProps) {
     },
   });
 
-  const isOverdue =
-    reminder.dueDate && !reminder.completed && new Date(reminder.dueDate) < new Date();
-  const dateLabel = formatDate(reminder.dueDate);
+  const overdue = isOverdue(reminder.dueDate, reminder.completed);
+  const dateLabel = formatDueDate(reminder.dueDate);
   const color = listColor ?? '#007AFF';
 
   return (
@@ -105,7 +91,7 @@ export function ReminderItem({ reminder, listColor }: ReminderItemProps) {
         {dateLabel && (
           <p
             className="text-xs mt-0.5"
-            style={{ color: isOverdue ? '#FF3B30' : '#8E8E93' }}
+            style={{ color: overdue ? '#FF3B30' : '#8E8E93' }}
           >
             {dateLabel}
           </p>

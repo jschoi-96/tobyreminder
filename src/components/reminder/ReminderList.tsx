@@ -4,18 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { getReminders, getLists } from '@/lib/api';
 import { useAppStore } from '@/store/useAppStore';
 import { ReminderItem } from './ReminderItem';
+import { isToday } from '@/lib/dateUtils';
 import type { Reminder, ReminderList as ReminderListType } from '@/types';
-
-function isToday(dateStr: string | null): boolean {
-  if (!dateStr) return false;
-  const d = new Date(dateStr);
-  const now = new Date();
-  return (
-    d.getFullYear() === now.getFullYear() &&
-    d.getMonth() === now.getMonth() &&
-    d.getDate() === now.getDate()
-  );
-}
 
 export function ReminderList() {
   const { selection } = useAppStore();

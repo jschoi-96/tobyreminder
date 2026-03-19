@@ -4,18 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { getReminders, getLists } from '@/lib/api';
 import { SmartListCard } from '@/components/sidebar/SmartListCard';
 import { ListItem } from '@/components/sidebar/ListItem';
+import { isToday } from '@/lib/dateUtils';
 import type { Reminder } from '@/types';
-
-function isToday(dateStr: string | null): boolean {
-  if (!dateStr) return false;
-  const d = new Date(dateStr);
-  const today = new Date();
-  return (
-    d.getFullYear() === today.getFullYear() &&
-    d.getMonth() === today.getMonth() &&
-    d.getDate() === today.getDate()
-  );
-}
 
 export function Sidebar() {
   const { data: reminders = [] } = useQuery<Reminder[]>({
