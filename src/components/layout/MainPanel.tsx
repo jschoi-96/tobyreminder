@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getLists } from '@/lib/api';
 import { ReminderList } from '@/components/reminder/ReminderList';
 import { AddReminderInput } from '@/components/reminder/AddReminderInput';
+import { ReminderDetailPanel } from '@/components/reminder/ReminderDetailPanel';
 import type { ReminderList as ReminderListType } from '@/types';
 
 const SMART_LABELS: Record<string, string> = {
@@ -37,7 +38,7 @@ export function MainPanel() {
   }
 
   return (
-    <main className="flex-1 flex flex-col h-full overflow-hidden bg-white">
+    <main className="flex-1 flex flex-col h-full overflow-hidden bg-white relative">
       <div className="px-6 pt-8 pb-2">
         <h1 className="text-3xl font-bold" style={{ color: titleColor }}>
           {title}
@@ -52,6 +53,7 @@ export function MainPanel() {
           </div>
         )}
       </div>
+      <ReminderDetailPanel />
     </main>
   );
 }
