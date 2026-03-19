@@ -74,26 +74,26 @@
 
 ### [FE] 전체 레이아웃
 
-- [ ] `globals.css` — `-apple-system` 폰트 전역 설정
-- [ ] `app/layout.tsx` — 2-패널 레이아웃 (사이드바 240px + 메인)
-- [ ] `components/layout/Sidebar.tsx` 컴포넌트 생성
-- [ ] `components/layout/MainPanel.tsx` 컴포넌트 생성
-- [ ] 사이드바 배경 `#F2F2F7` / 메인 배경 `#FFFFFF` 적용
+- [x] `globals.css` — `-apple-system` 폰트 전역 설정
+- [x] `app/layout.tsx` — 2-패널 레이아웃 (사이드바 240px + 메인)
+- [x] `components/layout/Sidebar.tsx` 컴포넌트 생성
+- [x] `components/layout/MainPanel.tsx` 컴포넌트 생성
+- [x] 사이드바 배경 `#F2F2F7` / 메인 배경 `#FFFFFF` 적용
 
 ### [FE] 스마트 목록 카드
 
-- [ ] `components/sidebar/SmartListCard.tsx` 컴포넌트 생성
-- [ ] 2열 그리드 카드 레이아웃
-- [ ] 오늘 (📅 Red) / 예정 (📋 Red) / 전체 (📌 Black) / 완료됨 (✅ Gray) 카드 렌더링
-- [ ] 각 카드 카운트 배지 API 연동
-- [ ] 카드 클릭 시 `useAppStore` 선택 상태 업데이트
+- [x] `components/sidebar/SmartListCard.tsx` 컴포넌트 생성
+- [x] 2열 그리드 카드 레이아웃
+- [x] 오늘 (📅 Red) / 예정 (📋 Red) / 전체 (📌 Black) / 완료됨 (✅ Gray) 카드 렌더링
+- [x] 각 카드 카운트 배지 API 연동
+- [x] 카드 클릭 시 `useAppStore` 선택 상태 업데이트
 
 ### [FE] 사이드바 나의 목록
 
-- [ ] `components/sidebar/ListItem.tsx` 컴포넌트 생성
-- [ ] `GET /api/lists` 연동 (TanStack Query)
-- [ ] 색상 원 + 이름 + 미완료 카운트 렌더링
-- [ ] 목록 클릭 시 메인 영역 제목 변경
+- [x] `components/sidebar/ListItem.tsx` 컴포넌트 생성
+- [x] `GET /api/lists` 연동 (TanStack Query)
+- [x] 색상 원 + 이름 + 미완료 카운트 렌더링
+- [x] 목록 클릭 시 메인 영역 제목 변경
 
 **완료 기준:** 사이드바에서 목록 클릭 시 메인 영역 제목이 바뀐다
 
@@ -103,24 +103,24 @@
 
 ### [FE] 리마인더 목록
 
-- [ ] `components/reminder/ReminderList.tsx` 생성
-- [ ] `GET /api/reminders?listId=` 연동 (TanStack Query)
-- [ ] `components/reminder/ReminderItem.tsx` 생성
-  - [ ] 원형 체크박스 (목록 색상 적용)
-  - [ ] 제목 텍스트
-  - [ ] 메모 (보조 텍스트, 13px gray)
-  - [ ] 날짜/시간 표시 (기한 초과 시 red)
-  - [ ] 우선순위 아이콘 (`!` / `!!` / `!!!`)
-  - [ ] `>` 상세 버튼
-- [ ] Hover 시 행 배경 연한 회색 (`hover:bg-gray-50`)
+- [x] `components/reminder/ReminderList.tsx` 생성
+- [x] `GET /api/reminders?listId=` 연동 (TanStack Query)
+- [x] `components/reminder/ReminderItem.tsx` 생성
+  - [x] 원형 체크박스 (목록 색상 적용)
+  - [x] 제목 텍스트
+  - [x] 메모 (보조 텍스트, 13px gray)
+  - [x] 날짜/시간 표시 (기한 초과 시 red)
+  - [x] 우선순위 아이콘 (`!` / `!!` / `!!!`)
+  - [x] `>` 상세 버튼
+- [x] Hover 시 행 배경 연한 회색 (`hover:bg-gray-50`)
 
 ### [FE] 완료 토글
 
-- [ ] 원형 체크박스 클릭 → `PATCH /api/reminders/{id}/complete`
-- [ ] Optimistic Update 적용 (TanStack Query `useMutation`)
-- [ ] 완료 시 취소선 CSS 적용
-- [ ] 완료 체크 애니메이션 (스케일 + 색상 채움, 200ms ease)
-- [ ] 완료된 리마인더 목록 하단으로 분리 표시
+- [x] 원형 체크박스 클릭 → `PATCH /api/reminders/{id}/complete`
+- [x] Optimistic Update 적용 (TanStack Query `useMutation`)
+- [x] 완료 시 취소선 CSS 적용
+- [x] 완료 체크 애니메이션 (스케일 + 색상 채움, 200ms ease)
+- [x] 완료된 리마인더 목록 하단으로 분리 표시
 
 **완료 기준:** 체크박스 클릭 즉시 UI 반영, 새로고침 후에도 상태 유지
 
@@ -130,14 +130,14 @@
 
 ### [FE] 인라인 리마인더 추가
 
-- [ ] `components/reminder/AddReminderInput.tsx` 생성
-- [ ] 목록 하단 고정 `+ 새로운 리마인더 추가` 버튼
-- [ ] 클릭 시 인라인 텍스트 입력 필드로 전환
-- [ ] Enter → `POST /api/reminders` 호출
-- [ ] 저장 후 다음 입력 필드 자동 포커스 (연속 입력)
-- [ ] Escape → 입력 취소 및 버튼으로 복귀
-- [ ] Optimistic Update 적용 (목록에 즉시 추가)
-- [ ] 빈 값 Enter 시 무시
+- [x] `components/reminder/AddReminderInput.tsx` 생성
+- [x] 목록 하단 고정 `+ 새로운 리마인더 추가` 버튼
+- [x] 클릭 시 인라인 텍스트 입력 필드로 전환
+- [x] Enter → `POST /api/reminders` 호출
+- [x] 저장 후 다음 입력 필드 자동 포커스 (연속 입력)
+- [x] Escape → 입력 취소 및 버튼으로 복귀
+- [x] Optimistic Update 적용 (목록에 즉시 추가)
+- [x] 빈 값 Enter 시 무시
 
 **완료 기준:** Enter 연속으로 리마인더 여러 개 빠르게 추가 가능
 
@@ -147,21 +147,21 @@
 
 ### [FE] 슬라이드 패널
 
-- [ ] `components/reminder/ReminderDetailPanel.tsx` 생성
-- [ ] 우측 슬라이드인 애니메이션 (300ms ease-out)
-- [ ] 패널 외부 클릭 시 닫힘
-- [ ] `[완료]` 버튼으로 닫기
+- [x] `components/reminder/ReminderDetailPanel.tsx` 생성
+- [x] 우측 슬라이드인 애니메이션 (300ms ease-out)
+- [x] 패널 외부 클릭 시 닫힘
+- [x] `[완료]` 버튼으로 닫기
 
 ### [FE] 패널 내 편집 필드
 
-- [ ] 제목 인라인 텍스트 입력
-- [ ] 메모 텍스트에어리어
-- [ ] 날짜 ON/OFF 토글 + 날짜 선택기
-- [ ] 시간 ON/OFF 토글 + 시간 선택기
-- [ ] 우선순위 세그먼트 버튼 (없음 / 낮음 / 중간 / 높음)
-- [ ] 목록 선택 드롭다운 (`GET /api/lists` 연동)
-- [ ] 변경 감지 → `PUT /api/reminders/{id}` 자동 저장 (debounce 500ms)
-- [ ] 저장 후 목록 즉시 반영 (TanStack Query invalidate)
+- [x] 제목 인라인 텍스트 입력
+- [x] 메모 텍스트에어리어
+- [x] 날짜 ON/OFF 토글 + 날짜 선택기
+- [x] 시간 ON/OFF 토글 + 시간 선택기
+- [x] 우선순위 세그먼트 버튼 (없음 / 낮음 / 중간 / 높음)
+- [x] 목록 선택 드롭다운 (`GET /api/lists` 연동)
+- [x] 변경 감지 → `PUT /api/reminders/{id}` 자동 저장 (debounce 500ms)
+- [x] 저장 후 목록 즉시 반영 (TanStack Query invalidate)
 
 **완료 기준:** 패널에서 제목 수정 시 목록에 즉시 반영
 
@@ -244,10 +244,10 @@
 | Phase | 내용 | BE | FE |
 |-------|------|----|----|
 | Phase 1 | 기반 구축 | ✅ | ✅ |
-| Phase 2 | 레이아웃 + 스마트 목록 | — | ⬜ |
-| Phase 3 | 리마인더 목록 + 완료 토글 | — | ⬜ |
-| Phase 4 | 리마인더 생성 | — | ⬜ |
-| Phase 5 | 리마인더 상세 편집 패널 | — | ⬜ |
+| Phase 2 | 레이아웃 + 스마트 목록 | — | ✅ |
+| Phase 3 | 리마인더 목록 + 완료 토글 | — | ✅ |
+| Phase 4 | 리마인더 생성 | — | ✅ |
+| Phase 5 | 리마인더 상세 편집 패널 | — | ✅ |
 | Phase 6 | 목록 관리 | — | ⬜ |
 | Phase 7 | 리마인더 삭제 + 검색 | — | ⬜ |
 | Phase 8 | 다크 모드 + 반응형 | — | ⬜ |
