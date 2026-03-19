@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getReminders, getLists, updateReminder } from '@/lib/api';
+import { getReminders, getLists, updateReminder, ApiError } from '@/lib/api';
 import { useAppStore } from '@/store/useAppStore';
 import type { Priority, Reminder, ReminderList } from '@/types';
 
@@ -71,13 +71,24 @@ export function ReminderDetailPanel() {
     }
   }, [reminder?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   const { mutate: save } = useMutation({
     mutationFn: (data: Parameters<typeof updateReminder>[1]) =>
       updateReminder(selectedReminderId!, data),
     onSuccess: (updated) => {
+      setSaveError(null);
       queryClient.setQueryData<Reminder[]>(['reminders'], (old = []) =>
         old.map((r) => (r.id === updated.id ? updated : r)),
       );
+      queryClient.invalidateQueries({ queryKey: ['reminders'] });
+    },
+    onError: (err) => {
+      const message =
+        err instanceof ApiError
+          ? `저장 실패 (${err.status}): ${err.message}`
+          : '저장 중 오류가 발생했습니다.';
+      setSaveError(message);
       queryClient.invalidateQueries({ queryKey: ['reminders'] });
     },
   });
@@ -131,14 +142,19 @@ export function ReminderDetailPanel() {
         style={{ animation: 'slideIn 300ms ease-out' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <span className="text-sm text-gray-400">세부사항</span>
-          <button
-            onClick={() => setSelectedReminderId(null)}
-            className="text-blue-500 text-sm font-semibold"
-          >
-            완료
-          </button>
+        <div className="flex flex-col border-b border-gray-100">
+          <div className="flex items-center justify-between px-5 py-4">
+            <span className="text-sm text-gray-400">세부사항</span>
+            <button
+              onClick={() => setSelectedReminderId(null)}
+              className="text-blue-500 text-sm font-semibold"
+            >
+              완료
+            </button>
+          </div>
+          {saveError && (
+            <div className="px-5 pb-3 text-xs text-red-500">{saveError}</div>
+          )}
         </div>
 
         {/* Body */}

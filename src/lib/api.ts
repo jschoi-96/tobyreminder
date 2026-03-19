@@ -1,5 +1,23 @@
 import type { Reminder, ReminderList, ReminderRequest, ReminderListRequest } from '@/types';
 
+export class ApiError extends Error {
+  readonly status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+
+  isNotFound(): boolean {
+    return this.status === 404;
+  }
+
+  isClientError(): boolean {
+    return this.status >= 400 && this.status < 500;
+  }
+}
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -9,8 +27,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   });
 
   if (!res.ok) {
-    const error = await res.text();
-    throw new Error(error || `Request failed: ${res.status}`);
+    const message = await res.text();
+    throw new ApiError(res.status, message || `Request failed: ${res.status}`);
   }
 
   if (res.status === 204) return undefined as T;
