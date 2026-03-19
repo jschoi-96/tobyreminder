@@ -11,8 +11,8 @@ import tody.ai.tobyreminder.repository.ReminderListRepository;
 import tody.ai.tobyreminder.repository.ReminderRepository;
 import tody.ai.tobyreminder.service.ports.inp.ReminderService;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -30,11 +30,12 @@ public class DefaultReminderService implements ReminderService {
         }
         return switch (filter == null ? "" : filter) {
             case "today" -> {
-                LocalDateTime start = LocalDate.now().atStartOfDay();
-                LocalDateTime end = LocalDate.now().atTime(23, 59, 59);
+                ZoneId zone = ZoneId.systemDefault();
+                OffsetDateTime start = OffsetDateTime.now(zone).toLocalDate().atStartOfDay(zone).toOffsetDateTime();
+                OffsetDateTime end = start.plusDays(1).minusSeconds(1);
                 yield reminderRepository.findToday(start, end);
             }
-            case "scheduled" -> reminderRepository.findScheduled(LocalDateTime.now());
+            case "scheduled" -> reminderRepository.findScheduled(OffsetDateTime.now());
             case "completed" -> reminderRepository.findByCompleted(true);
             default -> reminderRepository.findAll();
         };
@@ -60,7 +61,7 @@ public class DefaultReminderService implements ReminderService {
 
     @Override
     @Transactional
-    public Reminder update(Long id, String title, String notes, LocalDateTime dueDate, Priority priority, Long listId) {
+    public Reminder update(Long id, String title, String notes, OffsetDateTime dueDate, Priority priority, Long listId) {
         Reminder reminder = findById(id);
         ReminderList reminderList = listId != null
                 ? reminderListRepository.findById(listId)

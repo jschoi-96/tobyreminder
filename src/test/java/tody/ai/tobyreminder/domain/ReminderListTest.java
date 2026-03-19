@@ -25,11 +25,11 @@ class ReminderListTest {
         @Test
         @DisplayName("생성 시 createdAt이 자동으로 설정된다")
         void createdAtIsSetOnConstruct() {
-            var before = java.time.LocalDateTime.now();
+            var before = java.time.OffsetDateTime.now();
 
             ReminderList list = new ReminderList("업무", "#007AFF", "💼");
 
-            var after = java.time.LocalDateTime.now();
+            var after = java.time.OffsetDateTime.now();
             assertThat(list.getCreatedAt()).isNotNull();
             assertThat(list.getCreatedAt()).isAfterOrEqualTo(before);
             assertThat(list.getCreatedAt()).isBeforeOrEqualTo(after);

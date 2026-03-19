@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tody.ai.tobyreminder.domain.Priority;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -16,7 +16,7 @@ public class ReminderRequest {
 
     private String notes;
 
-    private LocalDateTime dueDate;
+    private OffsetDateTime dueDate;
 
     private Priority priority;
 

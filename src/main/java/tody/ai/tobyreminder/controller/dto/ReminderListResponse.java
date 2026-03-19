@@ -2,14 +2,14 @@ package tody.ai.tobyreminder.controller.dto;
 
 import tody.ai.tobyreminder.domain.ReminderList;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public record ReminderListResponse(
         Long id,
         String name,
         String color,
         String icon,
-        LocalDateTime createdAt
+        OffsetDateTime createdAt
 ) {
     public static ReminderListResponse from(ReminderList reminderList) {
         return new ReminderListResponse(

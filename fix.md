@@ -49,7 +49,7 @@
   - `ResourceNotFoundException` (→ 404), `DomainException` (→ 400) 분리
   - `GlobalExceptionHandler`에서 각각 처리
 
-- [ ] **[BE] `LocalDateTime` → `OffsetDateTime` 전환 검토**
+- [x] **[BE] `LocalDateTime` → `OffsetDateTime` 전환 검토**
   - 타임존 정보 손실 문제 해결
   - 클라이언트와 서버 간 날짜 불일치 방지
   - `ReminderRequest`, `ReminderResponse`, 도메인 엔티티 일관 변경
@@ -101,7 +101,7 @@
 | 구분 | 전체 | 완료 | 진행률 |
 |------|------|------|--------|
 | Critical | 3 | 3 | 100% |
-| Major | 6 | 5 | 83% |
+| Major | 6 | 6 | 100% |
 | Minor | 5 | 0 | 0% |
 | Suggestions | 3 | 0 | 0% |
-| **합계** | **17** | **8** | **47%** |
+| **합계** | **17** | **9** | **53%** |

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tody.ai.tobyreminder.exception.ResourceNotFoundException;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException e) {
         return ResponseEntity.status(404).body(Map.of(
-                "timestamp", LocalDateTime.now().toString(),
+                "timestamp", OffsetDateTime.now().toString(),
                 "status", 404,
                 "error", "Not Found",
                 "message", e.getMessage()
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException e) {
         return ResponseEntity.status(400).body(Map.of(
-                "timestamp", LocalDateTime.now().toString(),
+                "timestamp", OffsetDateTime.now().toString(),
                 "status", 400,
                 "error", "Bad Request",
                 "message", e.getMessage()
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
                 .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
                 .collect(Collectors.joining(", "));
         return ResponseEntity.status(400).body(Map.of(
-                "timestamp", LocalDateTime.now().toString(),
+                "timestamp", OffsetDateTime.now().toString(),
                 "status", 400,
                 "error", "Bad Request",
                 "message", message

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "reminders")
@@ -21,7 +21,7 @@ public class Reminder {
 
     private String notes;
 
-    private LocalDateTime dueDate;
+    private OffsetDateTime dueDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -29,46 +29,46 @@ public class Reminder {
 
     private boolean completed = false;
 
-    private LocalDateTime completedAt;
+    private OffsetDateTime completedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reminder_list_id")
     private ReminderList reminderList;
 
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     public Reminder(String title) {
         this.title = title;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdAt = OffsetDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
     }
 
-    public void update(String title, String notes, LocalDateTime dueDate, Priority priority, ReminderList reminderList) {
+    public void update(String title, String notes, OffsetDateTime dueDate, Priority priority, ReminderList reminderList) {
         this.title = title;
         this.notes = notes;
         this.dueDate = dueDate;
         this.priority = priority;
         this.reminderList = reminderList;
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void complete() {
         this.completed = true;
-        this.completedAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.completedAt = OffsetDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void uncomplete() {
         this.completed = false;
         this.completedAt = null;
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void assignTo(ReminderList reminderList) {
         this.reminderList = reminderList;
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
     }
 }

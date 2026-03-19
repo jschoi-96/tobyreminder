@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +30,13 @@ public class ReminderList {
     private List<Reminder> reminders = new ArrayList<>();
 
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     public ReminderList(String name, String color, String icon) {
         this.name = name;
         this.color = color;
         this.icon = icon;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = OffsetDateTime.now();
     }
 
     public void update(String name, String color, String icon) {

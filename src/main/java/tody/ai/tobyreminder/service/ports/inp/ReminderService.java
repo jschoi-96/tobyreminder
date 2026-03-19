@@ -3,7 +3,7 @@ package tody.ai.tobyreminder.service.ports.inp;
 import tody.ai.tobyreminder.domain.Priority;
 import tody.ai.tobyreminder.domain.Reminder;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface ReminderService {
@@ -14,7 +14,7 @@ public interface ReminderService {
 
     Reminder create(String title, Long listId);
 
-    Reminder update(Long id, String title, String notes, LocalDateTime dueDate, Priority priority, Long listId);
+    Reminder update(Long id, String title, String notes, OffsetDateTime dueDate, Priority priority, Long listId);
 
     Reminder toggleComplete(Long id);
 
